@@ -4,8 +4,8 @@ require 'json'
 module Firebase
   class Request
     def initialize(base_uri)
-      @client = HTTPClient.new(base_url: base_uri)
-      @client.default_header['Content-Type'] = 'application/json'
+      @base_uri = base_uri
+      @client = HTTPClient.new
     end
 
     def get(path, query_options)
@@ -31,7 +31,7 @@ module Firebase
     private
 
     def process(method, path, body=nil, query_options={})
-      response = @client.request(method, "#{path}.json", body: body, query: query_options, follow_redirect: true)
+      response = @client.request(method, "#{@base_uri}#{path}.json", body: body, query: query_options, header: { 'Content-Type' => 'application/json' }, follow_redirect: true)
       Firebase::Response.new(response)
     end
   end
