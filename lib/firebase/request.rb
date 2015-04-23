@@ -6,6 +6,9 @@ module Firebase
     def initialize(base_uri)
       @base_uri = base_uri
       @client = HTTPClient.new
+      @client.connect_timeout = 45
+      @client.receive_timeout = 30
+      @client
     end
 
     def get(path, query_options)
